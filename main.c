@@ -5,7 +5,8 @@
 
 int main(){
   stack_t a = *stack_new(1);
-  void *obj;
+  int object = 1;
+  void *obj = &object;
   stack_t *ptr = &a;
   stack_push(ptr, obj);
   printf("Capacity: %zu\n", a.capacity);
@@ -19,8 +20,18 @@ int main(){
   printf("----------\n");
   printf("Capacity: %zu\n", a.capacity);
   printf("Count: %zu\n", a.count);
+  stack_free(ptr);
 }
 
+void stack_free(stack_t *stack){
+  if(stack == NULL){
+    return;
+  }
+  if(stack->data != NULL){
+    free(stack->data);
+  }
+  free(stack);
+}
 
 stack_t *stack_new(size_t capacity){
   stack_t *stack = malloc(sizeof(stack_t));
@@ -53,7 +64,7 @@ void stack_push(stack_t *stack, void *obj){
   stack->count++;
 }
 
-stack_t *stack_pop(stack_t *stack){
+void *stack_pop(stack_t *stack){
   if(stack->count == 0){
     return NULL;
   }
